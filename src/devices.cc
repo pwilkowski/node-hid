@@ -156,3 +156,20 @@ Napi::Value devicesAsync(const Napi::CallbackInfo &info)
 
     return (new DevicesWorker(env, context, vendorId, productId))->QueueAndRun();
 }
+
+Napi::Object getVersions(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    Napi::Object versions = Napi::Object::New(env);
+
+    // Maybe change this in prebuild script?
+    versions.Set("nodeHid", Napi::String::New(env, "3.1.2"));
+
+    std::string hidapiVersion =
+    	std::to_string(HID_API_VERSION_MAJOR) + "." +
+		std::to_string(HID_API_VERSION_MINOR) + "." +
+		std::to_string(HID_API_VERSION_PATCH);
+
+    versions.Set("hidapi", Napi::String::New(env, hidapiVersion));
+
+    return versions;
+}
